@@ -1,2 +1,4 @@
 # mbeygd.github.io
-Logging Geoguessr daily challenges and results.
+Logging GeoGuessr daily challenges and results.
+
+Challenges at mbeygd.github.io
