@@ -53,6 +53,12 @@
             color: #666;
         }
     </style>
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 
 <body>
@@ -62,36 +68,29 @@
         <p>Normal ruleset: No moving, infinite time. Changes to this will be indicated.</p>
         <p> LOG INTO AN ACCOUNT TO TRACK SCORES!!!</p>
     </header>
+
     <main>
         <div class="challenge">
             <h2>Today's Challenge - <span id="date"></span> </h2>
-            <p> these trees look the same! </p> <!-- subtitle/comment -->
-            <p><a href="" target="_blank" id="today-link">Play Now</a></p>
-            <script>
-                // Update the "Play Now" link dynamically
-                document.getElementById('today-link').href = challengeLinks.today;
-            </script>
+            <p><a href="" target="_blank" id="today-link"></a></p>
         </div>
         
         <div class="challenge">
             <h2>Yesterday's Challenge - <span id="yesterday-date"></span> </h2>
-            <p> another MOVE MONDAY (2 minutes per round) </p> <!-- subtitle/comment -->
-            <p><a href="" target="_blank">View Results</a></p>
-            <script>
-                // Update the "Play Now" link dynamically
-                document.getElementById('yesterday-link').href = challengeLinks.today;
-            </script>
+            <p><a href="" target="_blank" id="yesterday-link">View Results</a></p>
         </div>
-
+        
         <div class="challenge">
             <h2>Past Challenges and Results</h2>
-            <p><a href="https://docs.google.com/spreadsheets/d/1h45N9Ugt3xLFq3SbEp902DdinezH3uHCqWeegJ1n99c/edit?usp=sharing" 
-                target="_blank">Google Spreadsheet</a></p>
+            <input type="text" id="calendar" placeholder="Select a date" />
+            <p><a href="" target="_blank" id="calendar-link"></a></p>
         </div>
     </main>
 
     <footer>
         <p>new challenge links will be posted whenever I remember lol</p>
+        <p><a href="https://docs.google.com/spreadsheets/d/1h45N9Ugt3xLFq3SbEp902DdinezH3uHCqWeegJ1n99c/edit?usp=sharing" 
+                target="_blank">Legacy Google Spreadsheet for 2025 Challenges</a></p>
     </footer>
 
     <script>
@@ -112,20 +111,97 @@
     </script>
 
     <script>
-        // JavaScript object to store challenge links
-        const challengeLinks = {
-        today:"https://www.geoguessr.com/challenge/0bFGdXEabRjb9JJC",
-        yesterday:"https://www.geoguessr.com/challenge/fdw4UY7bnKSp66z3",
-        };
+        async function loadChallenges() {
+            const response = await fetch('challenges.json');
+            const challenges = await response.json();
 
-        // Function to update challenge links dynamically
-        function updateChallengeLinks() {
-        document.querySelector('.challenge:nth-of-type(1) a').href = challengeLinks.today;
-        document.querySelector('.challenge:nth-of-type(2) a').href = challengeLinks.yesterday;
+            const formatDate = (date) => {
+                const y = date.getFullYear();
+                const m = String(date.getMonth() + 1).padStart(2, '0');
+                const d = String(date.getDate()).padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            };
+
+            const today = new Date();
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+
+            const todayKey = formatDate(today);
+            const yesterdayKey = formatDate(yesterday);
+
+            console.log("Today key:", todayKey);
+            console.log("Yesterday key:", yesterdayKey);
+
+            // obtaining links to display on the site
+            const todayLinkEl = document.getElementById('today-link');
+            const yesterdayLinkEl = document.getElementById('yesterday-link');
+
+            // display the href (if the link exists), else disable the href and show "not posted"
+            if (challenges[todayKey]) {
+                todayLinkEl.href = challenges[todayKey].link;
+                todayLinkEl.textContent = "Play Now";
+                todayLinkEl.style.pointerEvents = 'auto';
+                todayLinkEl.style.opacity = '1';
+            } else {
+                todayLinkEl.removeAttribute('href');
+                todayLinkEl.textContent = "Challenge not posted.";
+                todayLinkEl.style.pointerEvents = 'none';
+                todayLinkEl.style.opacity = '0.6';
+            }
+            
+            if (challenges[yesterdayKey]) {
+                yesterdayLinkEl.href = challenges[yesterdayKey].link;
+                yesterdayLinkEl.textContent = "View Results";
+                yesterdayLinkEl.style.pointerEvents = 'auto';
+                yesterdayLinkEl.style.opacity = '1';
+            } else {
+                yesterdayLinkEl.removeAttribute('href');
+                yesterdayLinkEl.textContent = "Challenge not posted.";
+                yesterdayLinkEl.style.pointerEvents = 'none';
+                yesterdayLinkEl.style.opacity = '0.6';
+            }
+    }
+    loadChallenges();
+    </script>
+
+    <script>
+        // JS for calendar functionality
+        async function initCalendar() {
+            // Array of JSON file paths
+            const files = ['challenges.json', 'chal2025.json'];
+        
+            // Fetch all files in parallel
+            const responses = await Promise.all(files.map(f => fetch(f)));
+            const jsonData = await Promise.all(responses.map(r => r.json()));
+
+            // Merge all JSON objects into one
+            const challenges = Object.assign({}, ...jsonData);
+
+            // Extract available dates
+            const availableDates = Object.keys(challenges);
+
+            // Initialize Flatpickr
+            flatpickr("#calendar", {
+                dateFormat: "Y-m-d",
+                maxDate: new Date(),
+                enable: availableDates, // only allow selecting dates that have challenges
+                onChange: function(selectedDates, dateStr) {
+                    const calendarLinkEl = document.getElementById('calendar-link');
+                    if (challenges[dateStr]) {
+                        calendarLinkEl.href = challenges[dateStr].link;
+                        calendarLinkEl.textContent = "View Challenge";
+                        calendarLinkEl.style.pointerEvents = 'auto';
+                        calendarLinkEl.style.opacity = '1';
+                    } else {
+                        calendarLinkEl.removeAttribute('href');
+                        calendarLinkEl.textContent = "Challenge not posted.";
+                        calendarLinkEl.style.pointerEvents = 'none';
+                        calendarLinkEl.style.opacity = '0.6';
+                    }
+                }
+            });
         }
-
-        // Call the function to update links
-        updateChallengeLinks();
+        initCalendar();
     </script>
 </body>
 </html>
