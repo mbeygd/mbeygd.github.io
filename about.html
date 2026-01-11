@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    /* Underline current page link */
+    .nav-links a[href="about.html"] {
+        text-decoration: underline;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MB GeoGuessr</title> <!-- tab name -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+    <!-- link to external CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+
+<body>
+    <!-- Top bar -->
+    <nav class="topbar">
+        <div class="topbar-inner">
+            <span class="site-title">MBey GeoGuessr Challenges</span>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- https://www.pexels.com/video/planet-earth-spinning-10343918/ -->
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="videos/earth20.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <main>
+        <a class="info" target="_blank" id="today-link">
+        <p>Documentation of past and current challenge links. Started on October 11th, 2025.</p>
+        <p>Normal ruleset: No moving, infinite time, played on the default World map. Changes to this will be indicated
+            in the challenge button.</p>
+        <p>IMPORTANT: PLEASE LOG INTO A GEOGUESSR ACCOUNT! This is so scores can be tracked per challenge.</p>
+        </a>
+    </main>
+    
+</body>
+</html>

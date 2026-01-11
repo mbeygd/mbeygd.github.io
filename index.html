@@ -1,58 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    /* Underline current page link */
+    .nav-links a[href="index.html"] {
+        text-decoration: underline;
+    }
+</style>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MB GeoGuessr</title> <!-- tab name-->
+    <title>MB GeoGuessr</title> <!-- tab name -->
     <link rel="icon" type="image/png" href="images/favicon.png">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: black;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        header {
-             background-color: #4CAF50;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            width: 100%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        main {
-            max-width: 600px;
-            width: 100%;
-            padding: 1rem;
-            box-sizing: border-box;
-        }
-        .challenge {
-            background: beige;
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .challenge a {
-            color: #4CAF50;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .challenge a:hover {
-            text-decoration: underline;
-        }
-        footer {
-            margin-top: auto;
-            padding: 1rem;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #666;
-        }
-    </style>
+
+    <!-- link to external CSS -->
+    <link rel="stylesheet" href="style.css">
 
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -62,146 +24,46 @@
 </head>
 
 <body>
+    <!-- Top bar -->
+    <nav class="topbar">
+        <div class="topbar-inner">
+            <span class="site-title">MBey GeoGuessr Challenges</span>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- https://www.pexels.com/video/planet-earth-spinning-10343918/ -->
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="videos/earth20.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
     <header>
-        <h1>MBey GeoGuessr Challenges</h1>
-        <p>Documentation of past and current challenge links.</p>
-        <p>Normal ruleset: No moving, infinite time. Changes to this will be indicated.</p>
-        <p> LOG INTO AN ACCOUNT TO TRACK SCORES!!!</p>
+        IMPORTANT: Please log into a GeoGuessr account to track scores!
     </header>
 
     <main>
-        <div class="challenge">
-            <h2>Today's Challenge - <span id="date"></span> </h2>
-            <p><a href="" target="_blank" id="today-link"></a></p>
-        </div>
+        <a class="challenge clickable" target="_blank" id="today-link">
+            <h1>Today's Challenge </h1>
+            <h3> <span id="date"></span> </h3>
+        </a>
+                
+        <a class="challenge clickable" target="_blank" id="yesterday-link">
+            <h1>Yesterday's Challenge</h1>
+            <h3> <span id="yesterday-date"></span> </h3>
+        </a>
         
         <div class="challenge">
-            <h2>Yesterday's Challenge - <span id="yesterday-date"></span> </h2>
-            <p><a href="" target="_blank" id="yesterday-link">View Results</a></p>
-        </div>
-        
-        <div class="challenge">
-            <h2>Past Challenges and Results</h2>
+            <h1>Past Challenges and Results</h1>
             <input type="text" id="calendar" placeholder="Select a date" />
             <p><a href="" target="_blank" id="calendar-link"></a></p>
         </div>
     </main>
 
-    <footer>
-        <p>new challenge links will be posted whenever I remember lol</p>
-        <p><a href="https://docs.google.com/spreadsheets/d/1h45N9Ugt3xLFq3SbEp902DdinezH3uHCqWeegJ1n99c/edit?usp=sharing" 
-                target="_blank">Legacy Google Spreadsheet for 2025 Challenges</a></p>
-    </footer>
-
-    <script>
-        // JavaScript to display today's date
-        const dateElement = document.getElementById('date');
-        const today = new Date();
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        dateElement.textContent = `${today.toLocaleDateString('en-US', options)}`;
-    </script>
-    
-    <script>
-        // JavaScript to display yesterday's date
-        const yesterdayDateElement = document.getElementById('yesterday-date');
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-        yesterdayDateElement.textContent = `${yesterday.toLocaleDateString('en-US', yesterdayOptions)}`;
-    </script>
-
-    <script>
-        async function loadChallenges() {
-            const response = await fetch('challenges.json');
-            const challenges = await response.json();
-
-            const formatDate = (date) => {
-                const y = date.getFullYear();
-                const m = String(date.getMonth() + 1).padStart(2, '0');
-                const d = String(date.getDate()).padStart(2, '0');
-                return `${y}-${m}-${d}`;
-            };
-
-            const today = new Date();
-            const yesterday = new Date();
-            yesterday.setDate(today.getDate() - 1);
-
-            const todayKey = formatDate(today);
-            const yesterdayKey = formatDate(yesterday);
-
-            console.log("Today key:", todayKey);
-            console.log("Yesterday key:", yesterdayKey);
-
-            // obtaining links to display on the site
-            const todayLinkEl = document.getElementById('today-link');
-            const yesterdayLinkEl = document.getElementById('yesterday-link');
-
-            // display the href (if the link exists), else disable the href and show "not posted"
-            if (challenges[todayKey]) {
-                todayLinkEl.href = challenges[todayKey].link;
-                todayLinkEl.textContent = "Play Now";
-                todayLinkEl.style.pointerEvents = 'auto';
-                todayLinkEl.style.opacity = '1';
-            } else {
-                todayLinkEl.removeAttribute('href');
-                todayLinkEl.textContent = "Challenge not posted.";
-                todayLinkEl.style.pointerEvents = 'none';
-                todayLinkEl.style.opacity = '0.6';
-            }
-            
-            if (challenges[yesterdayKey]) {
-                yesterdayLinkEl.href = challenges[yesterdayKey].link;
-                yesterdayLinkEl.textContent = "View Results";
-                yesterdayLinkEl.style.pointerEvents = 'auto';
-                yesterdayLinkEl.style.opacity = '1';
-            } else {
-                yesterdayLinkEl.removeAttribute('href');
-                yesterdayLinkEl.textContent = "Challenge not posted.";
-                yesterdayLinkEl.style.pointerEvents = 'none';
-                yesterdayLinkEl.style.opacity = '0.6';
-            }
-    }
-    loadChallenges();
-    </script>
-
-    <script>
-        // JS for calendar functionality
-        async function initCalendar() {
-            // Array of JSON file paths
-            const files = ['challenges.json', 'chal2025.json'];
-        
-            // Fetch all files in parallel
-            const responses = await Promise.all(files.map(f => fetch(f)));
-            const jsonData = await Promise.all(responses.map(r => r.json()));
-
-            // Merge all JSON objects into one
-            const challenges = Object.assign({}, ...jsonData);
-
-            // Extract available dates
-            const availableDates = Object.keys(challenges);
-
-            // Initialize Flatpickr
-            flatpickr("#calendar", {
-                dateFormat: "Y-m-d",
-                maxDate: new Date(),
-                enable: availableDates, // only allow selecting dates that have challenges
-                onChange: function(selectedDates, dateStr) {
-                    const calendarLinkEl = document.getElementById('calendar-link');
-                    if (challenges[dateStr]) {
-                        calendarLinkEl.href = challenges[dateStr].link;
-                        calendarLinkEl.textContent = "View Challenge";
-                        calendarLinkEl.style.pointerEvents = 'auto';
-                        calendarLinkEl.style.opacity = '1';
-                    } else {
-                        calendarLinkEl.removeAttribute('href');
-                        calendarLinkEl.textContent = "Challenge not posted.";
-                        calendarLinkEl.style.pointerEvents = 'none';
-                        calendarLinkEl.style.opacity = '0.6';
-                    }
-                }
-            });
-        }
-        initCalendar();
-    </script>
+    <!-- link to external JS -->
+    <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #000;  /* Fallback background color */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Full-screen background video */
+#bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;          /* Push behind content */
+    opacity: 0.25;        /* Adjust for readability */
+}
+
+header {
+    background-color: #346e36;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+main {
+    max-width: 600px;
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+.info {
+    display: block;
+    background: beige;
+    padding: 1.4rem;
+    margin: 1rem 0;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    text-decoration: none;
+    color: #333;
+    text-align: left;
+}
+.challenge {
+    display: block;
+    background: beige;
+    padding: 1.4rem;
+    margin: 1rem 0;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    text-decoration: none;
+    color: #333;
+    text-align: center;
+}
+
+/* Clickable challenge cards */
+.challenge.clickable {
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.challenge.clickable:hover {
+    transform: scale(1.04);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+}
+
+/* Prevent underline since it's now an <a> */
+.challenge.clickable h2,
+.challenge.clickable p {
+    text-decoration: none;
+}
+
+.challenge a {
+    display: block;                    /* Full-width clickable button */
+    text-align: center;
+
+    padding: 14px 20px;
+    margin-top: 10px;
+
+    background-color: #346e36;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.05rem;
+
+    border-radius: 14px;               /* Curved corners */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.challenge a:hover {
+    transform: scale(1.05);            /* Hover enlarge */
+    box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+    background-color: #43a047;
+}
+
+.challenge a:active {
+    transform: scale(0.97);            /* Press effect */
+}
+
+/* Disabled-looking links (JS already controls opacity) */
+.challenge a[style*="pointer-events: none"] {
+    background-color: #9e9e9e;
+}
+
+footer {
+    margin-top: auto;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/**************************/
+/* top bar related styles */
+.topbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+
+    background: #346e36;
+    backdrop-filter: blur(6px);
+}
+
+.topbar-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0.75rem 1rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Top left site title */
+.site-title {
+    font-weight: bold;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.nav-links a {
+    margin-left: 1rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: transform 0.2s ease;
+    display: inline-block; /* needed for transform */
+}
+
+.nav-links a:hover {
+    transform: scale(1.05); /* slightly bigger to simulate bold */
+}
+
+/* Disabled (default) calendar button */
+#calendar-link {
+    display: block;
+    margin-top: 10px;
+    padding: 14px 20px;
+    text-align: center;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 14px;
+
+    background-color: #9e9e9e;  /* gray */
+    color: #eee;
+    pointer-events: none;       /* unclickable */
+    opacity: 0.7;
+}
+
+/* Enabled state */
+#calendar-link.enabled {
+    background-color: #346e36;  /* green */
+    color: white;
+    pointer-events: auto;
+    opacity: 1;
+}
