@@ -14,6 +14,7 @@ yesterdayDateElement.textContent = `${yesterday.toLocaleDateString('en-US', yest
 async function loadChallenges() {
     const response = await fetch('challenges.json');
     const challenges = await response.json();
+    console.log("Challenges object:", challenges);
 
     const formatDate = (date) => {
         const y = date.getFullYear();
@@ -31,40 +32,30 @@ async function loadChallenges() {
 
     console.log("Today key:", todayKey);
     console.log("Yesterday key:", yesterdayKey);
-
+    console.log("Yesterday value:", challenges[yesterdayKey]);
+    
     // obtaining links to display on the site
     const todayLinkEl = document.getElementById('today-link');
     const yesterdayLinkEl = document.getElementById('yesterday-link');
 
-    // display the href (if the link exists), else disable the href and show "not posted"
+    // display the href (if the link exists), else disable the href
     if (challenges[todayKey]) {
         todayLinkEl.href = challenges[todayKey].link;
-        todayLinkEl.querySelector("p").textContent = "Click to play today's challenge.";
-        todayLinkEl.style.pointerEvents = 'auto';
-        todayLinkEl.style.opacity = '1';
     } else {
-        todayLinkEl.removeAttribute('href');
-        todayLinkEl.querySelector("p").textContent = "Challenge not posted.";
-        todayLinkEl.style.pointerEvents = 'none';
-        todayLinkEl.style.opacity = '0.6';
+        todayLinkEl.style.pointerEvents = "none";
+        todayLinkEl.style.opacity = "0.6";
     }
-    
+
     if (challenges[yesterdayKey]) {
         yesterdayLinkEl.href = challenges[yesterdayKey].link;
-        yesterdayLinkEl.querySelector("p").textContent = "Click to view results.";
-        yesterdayLinkEl.style.pointerEvents = 'auto';
-        yesterdayLinkEl.style.opacity = '1';
     } else {
-        yesterdayLinkEl.removeAttribute('href');
-        yesterdayLinkEl.textContent = "Challenge not posted.";
-        yesterdayLinkEl.style.pointerEvents = 'none';
-        yesterdayLinkEl.style.opacity = '0.6';
+        yesterdayLinkEl.style.pointerEvents = "none";
+        yesterdayLinkEl.style.opacity = "0.6";
     }
 }
 loadChallenges();
     
 
-    
 // JS for calendar functionality
 async function initCalendar() {
     // Array of JSON file paths
