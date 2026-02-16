@@ -59,6 +59,13 @@ main {
     text-align: center;
 }
 
+/* challenge subtitle */
+.challenge-subtitle {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: #333;
+    font-style: italic;
+}
 /* Clickable challenge cards */
 .challenge.clickable {
     cursor: pointer;

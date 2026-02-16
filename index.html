@@ -46,20 +46,23 @@
     </header>
 
     <main>
-        <a class="challenge clickable" target="_blank" id="today-link">
-            <h1>Today's Challenge </h1>
-            <h3> <span id="date"></span> </h3>
+        <a class="challenge clickable" id="today-link" href="#" target="_blank">
+            <h1>Today's Challenge</h1>
+            <h3><span id="date"></span></h3>
+            <p class="challenge-subtitle" id="today-subtitle"></p>
         </a>
                 
-        <a class="challenge clickable" target="_blank" id="yesterday-link">
+        <a class="challenge clickable" id="yesterday-link" href="#" target="_blank">
             <h1>Yesterday's Challenge</h1>
-            <h3> <span id="yesterday-date"></span> </h3>
+            <h3><span id="yesterday-date"></span></h3>
+            <p class="challenge-subtitle" id="yesterday-subtitle"></p>
         </a>
         
         <div class="challenge">
             <h1>Past Challenges and Results</h1>
             <input type="text" id="calendar" placeholder="Select a date" />
             <p><a href="" target="_blank" id="calendar-link"></a></p>
+            <p class="challenge-subtitle" id="calendar-subtitle"></p>
         </div>
     </main>
 

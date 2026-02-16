@@ -38,17 +38,27 @@ async function loadChallenges() {
     const todayLinkEl = document.getElementById('today-link');
     const yesterdayLinkEl = document.getElementById('yesterday-link');
 
+    // obtaining subtitle elements
+    const todaySubtitleEl = document.getElementById("today-subtitle");
+    const yesterdaySubtitleEl = document.getElementById("yesterday-subtitle");
+    
     // display the href (if the link exists), else disable the href
     if (challenges[todayKey]) {
         todayLinkEl.href = challenges[todayKey].link;
-    } else {
+        // obtain subtitle element and set text, if DNE then set to empty string
+        todaySubtitleEl.textContent = challenges[todayKey].subtitle ?? "";
+    } 
+    else {
         todayLinkEl.style.pointerEvents = "none";
         todayLinkEl.style.opacity = "0.6";
     }
 
     if (challenges[yesterdayKey]) {
         yesterdayLinkEl.href = challenges[yesterdayKey].link;
-    } else {
+        // obtain subtitle element and set text, if DNE then set to empty string
+        yesterdaySubtitleEl.textContent = challenges[yesterdayKey].subtitle ?? "";
+    } 
+    else {
         yesterdayLinkEl.style.pointerEvents = "none";
         yesterdayLinkEl.style.opacity = "0.6";
     }
@@ -93,6 +103,10 @@ async function initCalendar() {
                 calendarLinkEl.href = challenges[dateStr].link;
                 calendarLinkEl.textContent = "View Challenge";
                 calendarLinkEl.classList.add("enabled");
+                
+                // obtain subtitle for chosen date
+                const calendarSubtitleEl = document.getElementById("calendar-subtitle");
+                calendarSubtitleEl.textContent = challenges[dateStr].subtitle ?? "";
             }
         }
     });
